@@ -50,13 +50,12 @@ app.get("/api/persons/:id", async (req, res) => {
     }
 })
 
-app.delete("/api/persons/:id", async (req, res) => {
+app.delete("/api/persons/:id", async (req, res, next) => {
     try {
         await PhoneBook.findByIdAndRemove(req.params.id);
         res.status(204).end();
     } catch (err) {
-        console.log(`Error when deleting a phonebook with an id (${req.params.id}).`,)
-        res.status(500).end();
+        next(err);
     }
 })
 
@@ -84,6 +83,14 @@ app.post("/api/persons", async (req, res) => {
         res.status(500).end();
     }
 });
+
+const errorHandler = (error, request, response, next) => {
+    if(error.name === "CastError") return response.status(400).send({error: "malformatted id"});
+
+    next(error);
+}
+
+app.use(errorHandler);
 
 const PORT = 3001;
 
