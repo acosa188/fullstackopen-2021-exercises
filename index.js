@@ -15,39 +15,35 @@ morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :response-time ms - :body'));
 
 const PhoneBook = require("./models/phonebook");
-const { response } = require("express");
 
-app.get("/api/persons", async (req, res) => {
+app.get("/api/persons", async (req, res, next) => {
     try {
         const result = await PhoneBook.find({});
         res.json(result);
     } catch (err) {
-        console.log("Error when fetching all phonebooks.", err.message);
-        res.status(500).end();
+        next(err);
     }
 })
 
-app.get("/info", async (req, res) => {
+app.get("/info", async (req, res, next) => {
     try {
         const persons = await PhoneBook.find({});
         const info = `Phonebook has info for ${persons.length} people <br><br> ${new Date()}`;
         res.send(info);
     } catch (err) {
-        console.log("Error when querying information of phonebook.", err.message);
-        res.status(500).end();
+        next(err);
     }
 
 });
 
-app.get("/api/persons/:id", async (req, res) => {
+app.get("/api/persons/:id", async (req, res, next) => {
     try {
         const person = await PhoneBook.findById(req.params.id);
 
         if (!person) return res.status(404).send("person not found");
         res.json(person);
     } catch (err) {
-        console.log(`Error when fetching a phonebook with an id (${req.params.id}).`,)
-        res.status(500).end();
+        next(err);
     }
 })
 
@@ -60,7 +56,7 @@ app.delete("/api/persons/:id", async (req, res, next) => {
     }
 })
 
-app.post("/api/persons", async (req, res) => {
+app.post("/api/persons", async (req, res, next) => {
     const body = req.body;
 
     if (!body.name) return res.status(400).send("Name field is missing");
@@ -80,8 +76,7 @@ app.post("/api/persons", async (req, res) => {
     
         res.json(result);
     } catch (err) {
-        console.log("Error occur when creating a phonebook.", err.message);
-        res.status(500).end();
+        next(err);
     }
 });
 
