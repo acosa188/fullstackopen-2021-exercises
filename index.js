@@ -15,6 +15,7 @@ morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :response-time ms - :body'));
 
 const PhoneBook = require("./models/phonebook");
+const { response } = require("express");
 
 app.get("/api/persons", async (req, res) => {
     try {
@@ -83,6 +84,23 @@ app.post("/api/persons", async (req, res) => {
         res.status(500).end();
     }
 });
+
+app.put("/api/persons/:id", async (req, res, next) => {
+    const body = req.body;
+
+    const person = {
+        name: body.name,
+        number: body.number
+    };
+
+    try{
+        const result = await PhoneBook.findByIdAndUpdate(req.params.id, person, { new: true});
+        res.json(result);
+    }catch(err){
+        next(err);
+    }
+    
+})
 
 const errorHandler = (error, request, response, next) => {
     if(error.name === "CastError") return response.status(400).send({error: "malformatted id"});
