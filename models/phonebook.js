@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
+var uniqueValidator = require("mongoose-unique-validator");
 
 const phoneBookSchema = new mongoose.Schema({
-    id: Number,
-    name: String,
-    number: String
+    name: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    number: {
+        type: String,
+        required: true
+    }
 });
 
 phoneBookSchema.set("toJSON", {
@@ -13,5 +20,7 @@ phoneBookSchema.set("toJSON", {
         delete returnObject.__v;
     }
 })
+
+phoneBookSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("PhoneBook", phoneBookSchema);

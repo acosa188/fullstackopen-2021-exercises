@@ -63,9 +63,6 @@ app.post("/api/persons", async (req, res, next) => {
     if (!body.number) return res.status(400).send("Number field is missing");
 
     try {
-        const userExist = await PhoneBook.find({name: body.name});
-        if (userExist.length > 0) return res.status(403).send("Person already exist");
-
 
         const person = new PhoneBook({
             name: body.name,
@@ -99,6 +96,7 @@ app.put("/api/persons/:id", async (req, res, next) => {
 
 const errorHandler = (error, request, response, next) => {
     if(error.name === "CastError") return response.status(400).send({error: "malformatted id"});
+    else if(error.name === "ValidationError") return response.status(400).send({error: error.message});
 
     next(error);
 }
