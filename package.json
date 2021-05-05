@@ -1,0 +1,30 @@
+{
+  "name": "fullstackopen-2021-exercises",
+  "version": "1.0.0",
+  "description": "Solutions for these exercises of this course",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acosa188/fullstackopen-2021-exercises.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acosa188/fullstackopen-2021-exercises/issues"
+  },
+  "homepage": "https://github.com/acosa188/fullstackopen-2021-exercises#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^9.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.7"
+  }
+}
