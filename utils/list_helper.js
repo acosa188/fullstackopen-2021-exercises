@@ -12,8 +12,30 @@ const favoriteBlog = blogs => {
     return mostLikedBlog[0];
 }
 
+const mostBlogs = blogs => {
+    const authors  = new Set(blogs.map(blog => blog.author));
+    let authorsAndBlogs = [];
+    
+
+    authors.forEach((author) => {
+        const authorAndBlog = {
+            author,
+            blogs: blogs.filter(el => el.author === author).length
+        };
+
+        authorsAndBlogs.push(authorAndBlog);
+    });  
+
+    const mostAuthorBlogged = authorsAndBlogs.filter(elem => elem.blogs === Math.max(...authorsAndBlogs.map(x => x.blogs)));
+
+    if(mostAuthorBlogged.length > 0) return authorsAndBlogs.filter(elem => elem.blogs === Math.max(...authorsAndBlogs.map(x => x.blogs)))[0]
+
+    return {};
+}
+
 module.exports = {
     dummy,
     totalLikes,
-    favoriteBlog
+    favoriteBlog,
+    mostBlogs
 }
